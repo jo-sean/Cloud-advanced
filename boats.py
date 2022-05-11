@@ -14,17 +14,18 @@ bp = Blueprint('boat', __name__, url_prefix='/boats')
 def boats_get_post():
     if not request.is_json:
         # Checks if sent data is json, if not return 415
-        err = {"Error": "The request header 'content_type' is not application/json"}
+        err = {"Error": "The request header 'content_type' is not application/json "
+                        "and/or the sent request body does not contain json"}
         res = make_response(err)
-        res.headers.set('Content-type', 'application/json')
+        res.headers.set('Content-Type', 'application/json')
         res.status_code = 415
         return res
 
     elif 'application/json' not in request.accept_mimetypes:
         # Checks if client accepts json, if not return 406
-        err = {"Error": "The request header 'Accept' is not application/json"}
+        err = {"Error": "The request header ‘Accept' is not application/json"}
         res = make_response(err)
-        res.headers.set('Content-type', 'application/json')
+        res.headers.set('Content-Type', 'application/json')
         res.status_code = 406
         return res
 
@@ -33,9 +34,10 @@ def boats_get_post():
         try:
             content = request.get_json()
         except:
-            err = {"Error": "The request object is not JSON"}
+            err = {"Error": "The request header 'content_type' is not application/json "
+                            "and/or the sent request body does not contain json"}
             res = make_response(err)
-            res.headers.set('Content-type', 'application/json')
+            res.headers.set('Content-Type', 'application/json')
             res.status_code = 415
             return res
 
@@ -44,7 +46,7 @@ def boats_get_post():
         if not content or "name" not in content or "type" not in content or "length" not in content:
             err = {"Error": "The request object is missing at least one of the required attributes"}
             res = make_response(err)
-            res.headers.set('Content-type', 'application/json')
+            res.headers.set('Content-Type', 'application/json')
             res.status_code = 400
             return res
 
@@ -54,7 +56,7 @@ def boats_get_post():
                 or not isinstance(content["length"], int):
             err = {"Error": "The request object has at least one invalid value assigned to an attribute"}
             res = make_response(err)
-            res.headers.set('Content-type', 'application/json')
+            res.headers.set('Content-Type', 'application/json')
             res.status_code = 400
             return res
 
@@ -63,11 +65,11 @@ def boats_get_post():
         boat_list = list(query.fetch())
 
         # Search all boat objects and compare the names to make sure they are unique
-        for curr_load in boat_list:
-            if curr_load["name"] == content["name"]:
+        for curr_boat in boat_list:
+            if curr_boat["name"] == content["name"]:
                 err = {"Error": "There is already a boat with that name"}
                 res = make_response(err)
-                res.headers.set('Content-type', 'application/json')
+                res.headers.set('Content-Type', 'application/json')
                 res.status_code = 403
                 return res
 
@@ -93,7 +95,7 @@ def boats_get_post():
         # Status code 405
         res = make_response()
         res.headers.set('Allow', 'POST')
-        res.headers.set('Content-type', 'text/html')
+        res.headers.set('Content-Type', 'text/html')
         res.status_code = 405
         return res
 
@@ -104,17 +106,18 @@ def boats_get_put_delete(bid):
 
         if not request.is_json:
             # Checks if sent data is json, if not return 415
-            err = {"Error": "The request header 'content_type' is not application/json"}
+            err = err = {"Error": "The request header 'content_type' is not application/json "
+                                  "and/or the sent request body does not contain json"}
             res = make_response(err)
-            res.headers.set('Content-type', 'application/json')
+            res.headers.set('Content-Type', 'application/json')
             res.status_code = 415
             return res
 
         elif 'application/json' not in request.accept_mimetypes:
             # Checks if client accepts json, if not return 406
-            err = {"Error": "The request header 'Accept' is not application/json"}
+            err = {"Error": "The request header ‘Accept' is not application/json"}
             res = make_response(err)
-            res.headers.set('Content-type', 'application/json')
+            res.headers.set('Content-Type', 'application/json')
             res.status_code = 406
             return res
 
@@ -122,9 +125,10 @@ def boats_get_put_delete(bid):
         try:
             content = request.get_json()
         except:
-            err = {"Error": "The request header 'content_type' is not application/json"}
+            err = {"Error": "The request header 'content_type' is not application/json "
+                            "and/or the sent request body does not contain json"}
             res = make_response(err)
-            res.headers.set('Content-type', 'application/json')
+            res.headers.set('Content-Type', 'application/json')
             res.status_code = 415
             return res
 
@@ -135,7 +139,7 @@ def boats_get_put_delete(bid):
         if not boat:
             err = {"Error": "No boat with this boat_id exists"}
             res = make_response(err)
-            res.headers.set('Content-type', 'application/json')
+            res.headers.set('Content-Type', 'application/json')
             res.status_code = 404
             return res
 
@@ -144,7 +148,7 @@ def boats_get_put_delete(bid):
         if not content or "name" not in content or "type" not in content or "length" not in content:
             err = {"Error": "The request object is missing at least one of the required attributes"}
             res = make_response(err)
-            res.headers.set('Content-type', 'application/json')
+            res.headers.set('Content-Type', 'application/json')
             res.status_code = 400
             return res
 
@@ -154,7 +158,7 @@ def boats_get_put_delete(bid):
                 or not isinstance(content["length"], int):
             err = {"Error": "The request object has at least one invalid value assigned to an attribute"}
             res = make_response(err)
-            res.headers.set('Content-type', 'application/json')
+            res.headers.set('Content-Type', 'application/json')
             res.status_code = 400
             return res
         
@@ -163,11 +167,11 @@ def boats_get_put_delete(bid):
         boat_list = list(query.fetch())
 
         # Search all boat objects and compare the names to make sure they are unique
-        for curr_load in boat_list:
-            if curr_load["name"] == content["name"]:
+        for curr_boat in boat_list:
+            if curr_boat["name"] == content["name"]:
                 err = {"Error": "There is already a boat with that name"}
                 res = make_response(err)
-                res.headers.set('Content-type', 'application/json')
+                res.headers.set('Content-Type', 'application/json')
                 res.status_code = 403
                 return res
 
@@ -186,17 +190,18 @@ def boats_get_put_delete(bid):
 
         if not request.is_json:
             # Checks if sent data is json, if not return 415
-            err = {"Error": "The request header 'content_type' is not application/json"}
+            err = {"Error": "The request header 'content_type' is not application/json "
+                            "and/or the sent request body does not contain json"}
             res = make_response(err)
-            res.headers.set('Content-type', 'application/json')
+            res.headers.set('Content-Type', 'application/json')
             res.status_code = 415
             return res
 
         elif 'application/json' not in request.accept_mimetypes:
             # Checks if client accepts json, if not return 406
-            err = {"Error": "The request header 'Accept' is not application/json"}
+            err = {"Error": "The request header ‘Accept' is not application/json"}
             res = make_response(err)
-            res.headers.set('Content-type', 'application/json')
+            res.headers.set('Content-Type', 'application/json')
             res.status_code = 406
             return res
 
@@ -205,9 +210,10 @@ def boats_get_put_delete(bid):
             content = request.get_json()
         except:
             # Checks if sent data is json, if not return 415
-            err = {"Error": "The request header 'content_type' is not application/json"}
+            err = {"Error": "The request header 'content_type' is not application/json "
+                            "and/or the sent request body does not contain json"}
             res = make_response(err)
-            res.headers.set('Content-type', 'application/json')
+            res.headers.set('Content-Type', 'application/json')
             res.status_code = 415
             return res
 
@@ -218,7 +224,7 @@ def boats_get_put_delete(bid):
         if not boat:
             err = {"Error": "No boat with this boat_id exists"}
             res = make_response(err)
-            res.headers.set('Content-type', 'application/json')
+            res.headers.set('Content-Type', 'application/json')
             res.status_code = 404
             return res
 
@@ -228,7 +234,7 @@ def boats_get_put_delete(bid):
             if set(content["name"]).difference(ascii_letters + whitespace):
                 err = {"Error": "The request object has at least one invalid value assigned to an attribute"}
                 res = make_response(err)
-                res.headers.set('Content-type', 'application/json')
+                res.headers.set('Content-Type', 'application/json')
                 res.status_code = 400
                 return res
 
@@ -237,11 +243,11 @@ def boats_get_put_delete(bid):
             boat_list = list(query.fetch())
 
             # Search all boat objects and compare the names to make sure they are unique
-            for curr_load in boat_list:
-                if curr_load["name"] == content["name"]:
+            for curr_boat in boat_list:
+                if curr_boat["name"] == content["name"]:
                     err = {"Error": "There is already a boat with that name"}
                     res = make_response(err)
-                    res.headers.set('Content-type', 'application/json')
+                    res.headers.set('Content-Type', 'application/json')
                     res.status_code = 403
                     return res
 
@@ -253,7 +259,7 @@ def boats_get_put_delete(bid):
             if set(content["type"]).difference(ascii_letters + whitespace):
                 err = {"Error": "The request object has at least one invalid value assigned to an attribute"}
                 res = make_response(err)
-                res.headers.set('Content-type', 'application/json')
+                res.headers.set('Content-Type', 'application/json')
                 res.status_code = 400
                 return res
 
@@ -264,7 +270,7 @@ def boats_get_put_delete(bid):
             if not isinstance(content["length"], int):
                 err = {"Error": "The request object has at least one invalid value assigned to an attribute"}
                 res = make_response(err)
-                res.headers.set('Content-type', 'application/json')
+                res.headers.set('Content-Type', 'application/json')
                 res.status_code = 400
                 return res
 
@@ -284,7 +290,7 @@ def boats_get_put_delete(bid):
         if not boat:
             err = {"Error": "No boat with this boat_id exists"}
             res = make_response(err)
-            res.headers.set('Content-type', 'application/json')
+            res.headers.set('Content-Type', 'application/json')
             res.status_code = 404
             return res
 
@@ -300,7 +306,7 @@ def boats_get_put_delete(bid):
             # Checks if client accepts json, if not return 406
             err = {"Error": "The request header 'Accept' is not application/json or text/html"}
             res = make_response(err)
-            res.headers.set('Content-type', 'application/json')
+            res.headers.set('Content-Type', 'application/json')
             res.status_code = 406
             return res
 
@@ -311,7 +317,7 @@ def boats_get_put_delete(bid):
         if not boat:
             err = {"Error": "No boat with this boat_id exists"}
             res = make_response(err)
-            res.headers.set('Content-type', 'application/json')
+            res.headers.set('Content-Type', 'application/json')
             res.status_code = 404
             return res
 
@@ -319,16 +325,17 @@ def boats_get_put_delete(bid):
         boat["self"] = request.base_url
 
         if ('application/json' or '*/*') in request.accept_mimetypes:
-            # Checks if client accepts json, if not return 406
+            # Sends json response
             res = make_response(json.dumps(boat))
-            res.headers.set('Content-type', 'application/json')
+            res.headers.set('Content-Type', 'application/json')
             res.status_code = 200
             return res
 
         else:
+            # Sends html response
             content = json.dumps(boat)
             res = make_response(json2html.convert(json=content))
-            res.headers.set('Content-type', 'text/html')
+            res.headers.set('Content-Type', 'text/html')
             res.status_code = 200
             return res
 
@@ -336,6 +343,6 @@ def boats_get_put_delete(bid):
         # Status code 405
         res = make_response()
         res.headers.set('Allow', 'GET, PUT, PATCH, DELETE')
-        res.headers.set('Content-type', 'text/html')
+        res.headers.set('Content-Type', 'text/html')
         res.status_code = 405
         return res
